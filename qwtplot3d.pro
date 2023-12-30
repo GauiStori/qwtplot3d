@@ -9,15 +9,19 @@ OBJECTS_DIR       = tmp
 INCLUDEPATH       = include
 DEPENDPATH        = include src
 DESTDIR           = lib
-unix:LIBS        += -lGLU
-win32:LIBS       += -lglu32
+<<<<<<< HEAD
+#unix:LIBS        += -lGLU
+#win32:LIBS       += -lglu32
 #DESTDIR          = ../../../lib
-greaterThan(QT_MAJOR_VERSION,5) {
-  QT += core gui widgets opengl openglwidgets
-}
-else {
-  QT += opengl
-}
+#greaterThan(QT_MAJOR_VERSION,5) {
+#  QT += core gui widgets opengl openglwidgets
+#}
+#else {
+#  QT += opengl
+#}
+DEFINES           += HAVE_GLES
+#DESTDIR          = ../../../lib
+QT += opengl
 
 win32:TEMPLATE    = vclib
 win32:CONFIG     += dll exceptions
@@ -49,7 +53,7 @@ SOURCES += src/qwt3d_axis.cpp \
            src/qwt3d_scale.cpp
 
 SOURCES += src/qwt3d_gridmapping.cpp \
-					 src/qwt3d_parametricsurface.cpp \
+           src/qwt3d_parametricsurface.cpp \
            src/qwt3d_function.cpp
 
 SOURCES += src/qwt3d_surfaceplot.cpp \
@@ -60,7 +64,7 @@ SOURCES += src/qwt3d_surfaceplot.cpp \
 HEADERS += include/qwt3d_color.h \
            include/qwt3d_global.h \
            include/qwt3d_types.h \
-	         include/qwt3d_axis.h \
+           include/qwt3d_axis.h \
            include/qwt3d_coordsys.h \
            include/qwt3d_drawable.h \
            include/qwt3d_helper.h \

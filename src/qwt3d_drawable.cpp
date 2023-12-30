@@ -85,6 +85,14 @@ Triple Drawable::ViewPort2World(Triple win, bool *err)
     Triple obj;
 
     getMatrices(modelMatrix, projMatrix, viewport);
+#ifdef HAVE_GLES
+    // Missing XXXXXXXX
+    int res = GL_FALSE;
+#else
+	int res = gluUnProject(win.x, win.y, win.z, modelMatrix, projMatrix, viewport, &obj.x, &obj.y, &obj.z);
+#endif
+
+    getMatrices(modelMatrix, projMatrix, viewport);
     int res = gluUnProject(win.x,
                            win.y,
                            win.z,
@@ -109,16 +117,19 @@ Triple Drawable::World2ViewPort(Triple obj, bool *err)
     Triple win;
 
     getMatrices(modelMatrix, projMatrix, viewport);
-    int res
-        = gluProject(obj.x, obj.y, obj.z, modelMatrix, projMatrix, viewport, &win.x, &win.y, &win.z);
-
+#ifdef HAVE_GLES
+    // Missing XXXXXXXX
+    int res = GL_FALSE;
+#else
+    int res = gluProject(obj.x, obj.y, obj.z, modelMatrix, projMatrix, viewport, &win.x, &win.y, &win.z);
+#endif
     if (err)
         *err = (res) ? false : true;
     return win;
 }
 
 /**
-	Don't rely on (use) this in display lists !
+    Don't rely on (use) this in display lists !
 */
 Triple Drawable::relativePosition(Triple rel)
 {

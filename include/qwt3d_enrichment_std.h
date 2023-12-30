@@ -3,7 +3,13 @@
 
 #include "qwt3d_enrichment.h"
 
-namespace Qwt3D {
+#if defined(HAVE_GLES)
+#  include <GLES2/gl2.h>
+//#  include "eglport.h"
+#endif
+
+namespace Qwt3D
+{
 
 class Plot3D;
 
@@ -61,11 +67,15 @@ public:
     void draw(Qwt3D::Triple const &);
 
 private:
+#ifdef HAVE_GLES
+    // Missing XXXXXXXX
+#else
     GLUquadricObj *hat;
     GLUquadricObj *disk;
-    unsigned quality_;
-    double radius_;
-    GLboolean oldstate_;
+#endif
+  unsigned quality_;
+  double radius_;
+  GLboolean oldstate_;
 };
 
 //! 3D vector field.
@@ -96,7 +106,15 @@ private:
     GLUquadricObj *bottom;
     GLboolean oldstate_;
 
-    double calcRotation(Qwt3D::Triple &axis, Qwt3D::FreeVector const &vec);
+#ifdef HAVE_GLES
+    // Missing XXXXXXXX
+#else
+    GLUquadricObj *hat;
+    GLUquadricObj *disk;
+    GLUquadricObj *base;
+    GLUquadricObj *bottom;
+#endif
+    GLboolean oldstate_;
 
     int segments_;
     double rel_cone_length;

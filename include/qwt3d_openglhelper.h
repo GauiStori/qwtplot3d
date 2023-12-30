@@ -60,10 +60,15 @@ private:
 inline const GLubyte *gl_error()
 {
     GLenum errcode;
-    const GLubyte *err = 0;
+    const GLubyte* err = 0;
 
-    if ((errcode = glGetError()) != GL_NO_ERROR) {
+    if ((errcode = glGetError()) != GL_NO_ERROR)
+    {
+#ifdef HAVE_GLES
+        // Missing XXXXXXXX
+#else
         err = gluErrorString(errcode);
+#endif
     }
     return err;
 }
@@ -100,15 +105,19 @@ inline bool ViewPort2World(
     GLdouble projMatrix[16];
     GLint viewport[4];
 
-    getMatrices(modelMatrix, projMatrix, viewport);
+	getMatrices(modelMatrix, projMatrix, viewport);
+#ifdef HAVE_GLES
+    // Missing XXXXXXXX
+    int res = GL_FALSE;
+#else
     int res = gluUnProject(winx, winy, winz, modelMatrix, projMatrix, viewport, &objx, &objy, &objz);
-
+#endif
     return (res == GL_FALSE) ? false : true;
 }
 
 //! simplified glut routine (glProject): object coordinates_p --> windows coordinates_p
 /**
-	Don't rely on (use) this in display lists !
+    Don't rely on (use) this in display lists !
 */
 inline bool World2ViewPort(
     double &winx, double &winy, double &winz, double objx, double objy, double objz)
@@ -118,7 +127,12 @@ inline bool World2ViewPort(
     GLint viewport[4];
 
     getMatrices(modelMatrix, projMatrix, viewport);
+#ifdef HAVE_GLES
+    // Missing XXXXXXXX
+    int res = GL_FALSE;
+#else
     int res = gluProject(objx, objy, objz, modelMatrix, projMatrix, viewport, &winx, &winy, &winz);
+#endif
 
     return (res == GL_FALSE) ? false : true;
 }

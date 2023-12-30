@@ -164,24 +164,34 @@ void Dot::draw(Qwt3D::Triple const &pos)
 
 Cone::Cone()
 {
-    hat = gluNewQuadric();
-    disk = gluNewQuadric();
-
-    configure(0, 3);
+#ifdef HAVE_GLES
+    // Missing XXXXXXXX
+#else
+	hat      = gluNewQuadric();
+	disk     = gluNewQuadric();
+#endif
+  configure(0, 3);
 }
 
 Cone::Cone(double rad, unsigned quality)
 {
-    hat = gluNewQuadric();
-    disk = gluNewQuadric();
-
-    configure(rad, quality);
+#ifdef HAVE_GLES
+    // Missing XXXXXXXX
+#else
+	hat      = gluNewQuadric();
+	disk     = gluNewQuadric();
+#endif
+  configure(rad, quality);
 }
 
 Cone::~Cone()
 {
+#ifdef HAVE_GLES
+    // Missing XXXXXXXX
+#else
     gluDeleteQuadric(hat);
-    gluDeleteQuadric(disk);
+	gluDeleteQuadric(disk);
+#endif
 }
 
 void Cone::configure(double rad, unsigned quality)
@@ -191,32 +201,40 @@ void Cone::configure(double rad, unsigned quality)
     quality_ = quality;
     oldstate_ = GL_FALSE;
 
-    gluQuadricDrawStyle(hat, GLU_FILL);
-    gluQuadricNormals(hat, GLU_SMOOTH);
-    gluQuadricOrientation(hat, GLU_OUTSIDE);
-    gluQuadricDrawStyle(disk, GLU_FILL);
-    gluQuadricNormals(disk, GLU_SMOOTH);
-    gluQuadricOrientation(disk, GLU_OUTSIDE);
+#ifdef HAVE_GLES
+    // Missing XXXXXXXX
+#else
+	gluQuadricDrawStyle(hat,GLU_FILL);
+	gluQuadricNormals(hat,GLU_SMOOTH);
+	gluQuadricOrientation(hat,GLU_OUTSIDE);
+	gluQuadricDrawStyle(disk,GLU_FILL);
+	gluQuadricNormals(disk,GLU_SMOOTH);
+	gluQuadricOrientation(disk,GLU_OUTSIDE);
+#endif
 }
 
-void Cone::draw(Qwt3D::Triple const &pos)
-{
-    RGBA rgba = (*plot->dataColor())(pos);
-    glColor4d(rgba.r, rgba.g, rgba.b, rgba.a);
+void Cone::draw(Qwt3D::Triple const& pos)
+{  
+	RGBA rgba = (*plot->dataColor())(pos);
+    glColor4d(rgba.r,rgba.g,rgba.b,rgba.a);
 
     GLint mode;
-    glGetIntegerv(GL_MATRIX_MODE, &mode);
-    glMatrixMode(GL_MODELVIEW);
+	glGetIntegerv(GL_MATRIX_MODE, &mode);
+	glMatrixMode( GL_MODELVIEW );
     glPushMatrix();
 
     glTranslatef(pos.x, pos.y, pos.z);
 
-    gluCylinder(hat, 0.0, radius_, radius_ * 2, quality_, 1);
-    glTranslatef(0, 0, radius_ * 2);
+#ifdef HAVE_GLES
+    // Missing XXXXXXXX
+#else
+    gluCylinder(hat, 0.0, radius_, radius_*2, quality_, 1);
+    glTranslatef(0, 0, radius_*2);
     gluDisk(disk, 0.0, radius_, quality_, 1);
 
     glPopMatrix();
-    glMatrixMode(mode);
+	glMatrixMode(mode);
+#endif
 }
 
 /////////////////////////////////////////////////////////////////
@@ -226,34 +244,42 @@ void Cone::draw(Qwt3D::Triple const &pos)
 /////////////////////////////////////////////////////////////////
 
 Arrow::Arrow()
-{
-    hat = gluNewQuadric();
-    disk = gluNewQuadric();
-    base = gluNewQuadric();
-    bottom = gluNewQuadric();
+{	
+#ifdef HAVE_GLES
+    // Missing XXXXXXXX
+#else
+	hat      = gluNewQuadric();
+	disk     = gluNewQuadric();
+	base    = gluNewQuadric();
+	bottom   = gluNewQuadric();
 
-    gluQuadricDrawStyle(hat, GLU_FILL);
-    gluQuadricNormals(hat, GLU_SMOOTH);
-    gluQuadricOrientation(hat, GLU_OUTSIDE);
-    gluQuadricDrawStyle(disk, GLU_FILL);
-    gluQuadricNormals(disk, GLU_SMOOTH);
-    gluQuadricOrientation(disk, GLU_OUTSIDE);
-    gluQuadricDrawStyle(base, GLU_FILL);
-    gluQuadricNormals(base, GLU_SMOOTH);
-    gluQuadricOrientation(base, GLU_OUTSIDE);
-    gluQuadricDrawStyle(bottom, GLU_FILL);
-    gluQuadricNormals(bottom, GLU_SMOOTH);
-    gluQuadricOrientation(bottom, GLU_OUTSIDE);
+	gluQuadricDrawStyle(hat,GLU_FILL);
+	gluQuadricNormals(hat,GLU_SMOOTH);
+	gluQuadricOrientation(hat,GLU_OUTSIDE);
+	gluQuadricDrawStyle(disk,GLU_FILL);
+	gluQuadricNormals(disk,GLU_SMOOTH);
+	gluQuadricOrientation(disk,GLU_OUTSIDE);
+	gluQuadricDrawStyle(base,GLU_FILL);
+	gluQuadricNormals(base,GLU_SMOOTH);
+	gluQuadricOrientation(base,GLU_OUTSIDE);
+	gluQuadricDrawStyle(bottom,GLU_FILL);
+	gluQuadricNormals(bottom,GLU_SMOOTH);
+	gluQuadricOrientation(bottom,GLU_OUTSIDE);
+#endif
 
     configure(3, 0.4, 0.06, 0.02);
 }
 
 Arrow::~Arrow()
 {
-    gluDeleteQuadric(hat);
-    gluDeleteQuadric(disk);
-    gluDeleteQuadric(base);
-    gluDeleteQuadric(bottom);
+#ifdef HAVE_GLES
+    // Missing XXXXXXXX
+#else
+	gluDeleteQuadric(hat);
+	gluDeleteQuadric(disk);
+	gluDeleteQuadric(base);
+	gluDeleteQuadric(bottom);
+#endif
 }
 
 /**
@@ -285,8 +311,10 @@ void Arrow::draw(Qwt3D::Triple const &pos)
     radius[0] = rel_cone_radius * length;
     radius[1] = rel_stem_radius * length;
 
-    GLint mode;
-    glGetIntegerv(GL_MATRIX_MODE, &mode);
+    // GLint mode; FIXME From HEAD
+    // glGetIntegerv(GL_MATRIX_MODE, &mode);
+    glMatrixMode( GL_MODELVIEW );
+    glPushMatrix();
 
     glMatrixMode(GL_MODELVIEW);
     glPushMatrix();
@@ -297,17 +325,21 @@ void Arrow::draw(Qwt3D::Triple const &pos)
     glTranslatef(beg.x, beg.y, beg.z);
     glRotatef(phi, axis.x, axis.y, axis.z);
 
-    double baseheight = (1 - rel_cone_length) * length;
-
-    glTranslatef(0, 0, baseheight);
-
-    gluCylinder(hat, radius[0], 0.0, rel_cone_length * length, segments_, 1);
-    gluDisk(disk, radius[1], radius[0], segments_, 1);
+#ifdef HAVE_GLES
+    // Missing XXXXXXXX
+#else
+    gluCylinder(hat, radius[0], 0.0, rel_cone_length * length, segments_,1);
+    gluDisk(disk,radius[1],radius[0], segments_,1);
+#endif
 
     glTranslatef(0, 0, -baseheight);
 
-    gluCylinder(base, radius[1], radius[1], baseheight, segments_, 1);
-    gluDisk(disk, 0, radius[1], segments_, 1);
+#ifdef HAVE_GLES
+    // Missing XXXXXXXX
+#else
+    gluCylinder(base, radius[1],radius[1], baseheight,segments_,1);
+    gluDisk(disk,0,radius[1],segments_,1);
+#endif
 
     glPopMatrix();
     glMatrixMode(mode);
@@ -315,10 +347,10 @@ void Arrow::draw(Qwt3D::Triple const &pos)
 
 //! transform a vector on the z axis with length |beg-end|, to get them in coincidence with the vector(beg,end)
 /**
-	\return Angle in degree to rotate
-	\param axis   The axis to rotate around
-	\param beg    result vector base point
-	\param end    result vector top point
+    \return Angle in degree to rotate
+    \param axis   The axis to rotate around
+    \param beg    result vector base point
+    \param end    result vector top point
 */
 double Arrow::calcRotation(Triple &axis, FreeVector const &vec)
 {
