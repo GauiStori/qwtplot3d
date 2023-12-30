@@ -3,6 +3,11 @@
 
 #include "qwt3d_enrichment.h"
 
+#if defined(HAVE_GLES)
+#  include <GLES2/gl2.h>
+//#  include "eglport.h"
+#endif
+
 namespace Qwt3D
 {
 
@@ -62,8 +67,12 @@ public:
   void draw(Qwt3D::Triple const&);
 
 private:
+#ifdef HAVE_GLES
+    // Missing XXXXXXXX
+#else
 	GLUquadricObj *hat;
 	GLUquadricObj *disk;
+#endif
   unsigned quality_;
   double radius_;
   GLboolean oldstate_;
@@ -93,11 +102,15 @@ public:
 
 private:
 
+#ifdef HAVE_GLES
+    // Missing XXXXXXXX
+#else
 	GLUquadricObj *hat;
 	GLUquadricObj *disk;
 	GLUquadricObj *base;
 	GLUquadricObj *bottom;
-  GLboolean oldstate_;
+#endif
+    GLboolean oldstate_;
 
 	double calcRotation(Qwt3D::Triple& axis, Qwt3D::FreeVector const& vec);
 

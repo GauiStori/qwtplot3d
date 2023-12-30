@@ -61,10 +61,15 @@
 #  define GL2PSDLL_API
 #endif
 
-#if defined(__APPLE__) || defined(HAVE_OPENGL_GL_H)
-#  include <OpenGL/gl.h>
+#if defined(HAVE_GLES)
+#  include <GLES2/gl2.h>
+//#  include "eglport.h"
 #else
-#  include <GL/gl.h>
+#  if defined(__APPLE__) || defined(HAVE_OPENGL_GL_H)
+#    include <OpenGL/gl.h>
+#  else
+#    include <GL/gl.h>
+#  endif
 #endif
 
 /* Support for compressed PostScript/PDF/SVG and for embedded PNG

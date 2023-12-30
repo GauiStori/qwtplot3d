@@ -8,8 +8,9 @@ MOC_DIR           = tmp
 OBJECTS_DIR       = tmp
 INCLUDEPATH       = include
 DEPENDPATH        = include src
-DESTDIR      			= lib
-#DESTDIR      			= ../../../lib
+DESTDIR           = lib
+DEFINES           += HAVE_GLES
+#DESTDIR          = ../../../lib
 QT += opengl
 
 win32:TEMPLATE    = vclib

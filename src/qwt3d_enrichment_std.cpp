@@ -166,24 +166,34 @@ void Dot::draw(Qwt3D::Triple const& pos)
 
 Cone::Cone()
 {
+#ifdef HAVE_GLES
+    // Missing XXXXXXXX
+#else
 	hat      = gluNewQuadric();
 	disk     = gluNewQuadric();
-
+#endif
   configure(0, 3);
 }
 
 Cone::Cone(double rad, unsigned quality)
 {
+#ifdef HAVE_GLES
+    // Missing XXXXXXXX
+#else
 	hat      = gluNewQuadric();
 	disk     = gluNewQuadric();
-
+#endif
   configure(rad, quality);
 }
 
 Cone::~Cone()
 {
-	gluDeleteQuadric(hat);
+#ifdef HAVE_GLES
+    // Missing XXXXXXXX
+#else
+    gluDeleteQuadric(hat);
 	gluDeleteQuadric(disk);
+#endif
 }
 
 void Cone::configure(double rad, unsigned quality)
@@ -193,32 +203,40 @@ void Cone::configure(double rad, unsigned quality)
   quality_ = quality;
   oldstate_ = GL_FALSE;
 
+#ifdef HAVE_GLES
+    // Missing XXXXXXXX
+#else
 	gluQuadricDrawStyle(hat,GLU_FILL);
 	gluQuadricNormals(hat,GLU_SMOOTH);
 	gluQuadricOrientation(hat,GLU_OUTSIDE);
 	gluQuadricDrawStyle(disk,GLU_FILL);
 	gluQuadricNormals(disk,GLU_SMOOTH);
 	gluQuadricOrientation(disk,GLU_OUTSIDE);
+#endif
 }
 
 void Cone::draw(Qwt3D::Triple const& pos)
 {  
 	RGBA rgba = (*plot->dataColor())(pos);
-  glColor4d(rgba.r,rgba.g,rgba.b,rgba.a);
+    glColor4d(rgba.r,rgba.g,rgba.b,rgba.a);
 
-  GLint mode;
+    GLint mode;
 	glGetIntegerv(GL_MATRIX_MODE, &mode);
 	glMatrixMode( GL_MODELVIEW );
-  glPushMatrix();
+    glPushMatrix();
 
-  glTranslatef(pos.x, pos.y, pos.z);
+    glTranslatef(pos.x, pos.y, pos.z);
 
-  gluCylinder(hat, 0.0, radius_, radius_*2, quality_, 1);
-  glTranslatef(0, 0, radius_*2);
-	gluDisk(disk, 0.0, radius_, quality_, 1);
+#ifdef HAVE_GLES
+    // Missing XXXXXXXX
+#else
+    gluCylinder(hat, 0.0, radius_, radius_*2, quality_, 1);
+    glTranslatef(0, 0, radius_*2);
+    gluDisk(disk, 0.0, radius_, quality_, 1);
 
-  glPopMatrix();
+    glPopMatrix();
 	glMatrixMode(mode);
+#endif
 }
 
 
@@ -230,6 +248,9 @@ void Cone::draw(Qwt3D::Triple const& pos)
 
 Arrow::Arrow()
 {	
+#ifdef HAVE_GLES
+    // Missing XXXXXXXX
+#else
 	hat      = gluNewQuadric();
 	disk     = gluNewQuadric();
 	base    = gluNewQuadric();
@@ -247,16 +268,21 @@ Arrow::Arrow()
 	gluQuadricDrawStyle(bottom,GLU_FILL);
 	gluQuadricNormals(bottom,GLU_SMOOTH);
 	gluQuadricOrientation(bottom,GLU_OUTSIDE);
+#endif
 
 	configure(3, 0.4, 0.06, 0.02);
 }
 
 Arrow::~Arrow()
 {
+#ifdef HAVE_GLES
+    // Missing XXXXXXXX
+#else
 	gluDeleteQuadric(hat);
 	gluDeleteQuadric(disk);
 	gluDeleteQuadric(base);
 	gluDeleteQuadric(bottom);
+#endif
 }
 
 /**
@@ -269,8 +295,8 @@ Arrow::~Arrow()
 void Arrow::configure(int segs, double relconelength, double relconerad, double relstemrad)
 {
 	plot = 0;
-  segments_ = segs;
-  oldstate_ = GL_FALSE;
+    segments_ = segs;
+    oldstate_ = GL_FALSE;
 	rel_cone_length = relconelength;
 	rel_cone_radius = relconerad;
 	rel_stem_radius = relstemrad;	
@@ -292,28 +318,36 @@ void Arrow::draw(Qwt3D::Triple const& pos)
 	glGetIntegerv(GL_MATRIX_MODE, &mode);
 
 	glMatrixMode( GL_MODELVIEW );
-  glPushMatrix();
+    glPushMatrix();
 
 
 	Triple axis;
 	double phi = calcRotation(axis, FreeVector(beg,end));
 	
 	glTranslatef(beg.x, beg.y, beg.z);
-  glRotatef(phi, axis.x, axis.y, axis.z);
+    glRotatef(phi, axis.x, axis.y, axis.z);
 
 	double baseheight = (1-rel_cone_length) * length;
 	
 	glTranslatef(0, 0, baseheight);
 
+#ifdef HAVE_GLES
+    // Missing XXXXXXXX
+#else
 	gluCylinder(hat, radius[0], 0.0, rel_cone_length * length, segments_,1);
 	gluDisk(disk,radius[1],radius[0], segments_,1);
+#endif
 	
 	glTranslatef(0, 0, -baseheight);
 	
+#ifdef HAVE_GLES
+    // Missing XXXXXXXX
+#else
 	gluCylinder(base, radius[1],radius[1], baseheight,segments_,1);
 	gluDisk(disk,0,radius[1],segments_,1);
+#endif
 
-  glPopMatrix();
+    glPopMatrix();
 	glMatrixMode(mode);
 }
 

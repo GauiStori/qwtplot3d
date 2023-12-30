@@ -64,7 +64,11 @@ inline const GLubyte* gl_error()
 	
 	if ((errcode = glGetError()) != GL_NO_ERROR)
 	{
-		err = gluErrorString(errcode);
+#ifdef HAVE_GLES
+        // Missing XXXXXXXX
+#else
+        err = gluErrorString(errcode);
+#endif
 	}
 	return err;
 }
@@ -101,8 +105,12 @@ inline bool ViewPort2World(double& objx, double& objy, double& objz, double winx
   GLint viewport[4];
 
 	getMatrices(modelMatrix, projMatrix, viewport);
+#ifdef HAVE_GLES
+    // Missing XXXXXXXX
+    int res = GL_FALSE;
+#else
 	int res = gluUnProject(winx, winy, winz, modelMatrix, projMatrix, viewport, &objx, &objy, &objz);
-
+#endif
 	return (res == GL_FALSE) ? false : true;
 }
 
@@ -117,7 +125,12 @@ inline bool World2ViewPort(double& winx, double& winy, double& winz, double objx
   GLint viewport[4];
 
 	getMatrices(modelMatrix, projMatrix, viewport);
+#ifdef HAVE_GLES
+    // Missing XXXXXXXX
+    int res = GL_FALSE;
+#else
 	int res = gluProject(objx, objy, objz, modelMatrix, projMatrix, viewport, &winx, &winy, &winz);
+#endif
 
 	return (res == GL_FALSE) ? false : true;
 }

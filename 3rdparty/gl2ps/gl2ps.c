@@ -870,10 +870,18 @@ static GLint gl2psAddText(GLint type, const char *str, const char *fontname,
 
   if(gl2ps->options & GL2PS_NO_TEXT) return GL2PS_SUCCESS;
 
+#ifdef HAVE_GLES
+    // Missing XXXXXXXX
+#else
   glGetBooleanv(GL_CURRENT_RASTER_POSITION_VALID, &valid);
+#endif
   if(GL_FALSE == valid) return GL2PS_SUCCESS; /* the primitive is culled */
 
+#ifdef HAVE_GLES
+    // Missing XXXXXXXX
+#else
   glGetFloatv(GL_CURRENT_RASTER_POSITION, pos);
+#endif
 
   prim = (GL2PSprimitive*)gl2psMalloc(sizeof(GL2PSprimitive));
   prim->type = type;
@@ -888,7 +896,11 @@ static GLint gl2psAddText(GLint type, const char *str, const char *fontname,
   prim->pattern = 0;
   prim->factor = 0;
   prim->width = 1;
+#ifdef HAVE_GLES
+    // Missing XXXXXXXX
+#else
   glGetFloatv(GL_CURRENT_RASTER_COLOR, prim->verts[0].rgba);
+#endif
   prim->data.text = (GL2PSstring*)gl2psMalloc(sizeof(GL2PSstring));
   prim->data.text->str = (char*)gl2psMalloc((strlen(str)+1)*sizeof(char));
   strcpy(prim->data.text->str, str); 
@@ -2184,6 +2196,10 @@ static GLint gl2psGetVertex(GL2PSvertex *v, GLfloat *p)
   v->xyz[1] = p[1];
   v->xyz[2] = p[2];
 
+#ifdef HAVE_GLES
+    // Missing XXXXXXXX
+  return 7;
+#else
   if(gl2ps->colormode == GL_COLOR_INDEX && gl2ps->colorsize > 0){
     i = (GLint)(p[3] + 0.5);
     v->rgba[0] = gl2ps->colormap[i][0];
@@ -2199,10 +2215,14 @@ static GLint gl2psGetVertex(GL2PSvertex *v, GLfloat *p)
     v->rgba[3] = p[6];
     return 7;
   }
+#endif
 }
 
 static void gl2psParseFeedbackBuffer(GLint used)
 {
+#ifdef HAVE_GLES
+    // Missing XXXXXXXX
+#else
   char flag;
   GLushort pattern = 0;
   GLboolean boundary;
@@ -2401,7 +2421,7 @@ static void gl2psParseFeedbackBuffer(GLint used)
       break;
     }
   }
-
+#endif
   gl2psListReset(gl2ps->auxprimitives);
 }
 
@@ -3122,7 +3142,11 @@ static void gl2psPrintPostScriptBeginViewport(GLint viewport[4])
   GLfloat rgba[4];
   int x = viewport[0], y = viewport[1], w = viewport[2], h = viewport[3];
 
+#ifdef HAVE_GLES
+    // Missing XXXXXXXX
+#else
   glRenderMode(GL_FEEDBACK);
+#endif
 
   if(gl2ps->header){
     gl2psPrintPostScriptHeader();
@@ -3137,7 +3161,11 @@ static void gl2psPrintPostScriptBeginViewport(GLint viewport[4])
       glGetFloatv(GL_COLOR_CLEAR_VALUE, rgba);
     }
     else{
+#ifdef HAVE_GLES
+    // Missing XXXXXXXX
+#else
       glGetIntegerv(GL_INDEX_CLEAR_VALUE, &index);
+#endif
       rgba[0] = gl2ps->colormap[index][0];
       rgba[1] = gl2ps->colormap[index][1];
       rgba[2] = gl2ps->colormap[index][2];
@@ -3312,7 +3340,11 @@ static void gl2psPrintTeXFooter(void)
 
 static void gl2psPrintTeXBeginViewport(GLint viewport[4])
 {
+#ifdef HAVE_GLES
+    // Missing XXXXXXXX
+#else
   glRenderMode(GL_FEEDBACK);
+#endif
   
   if(gl2ps->header){
     gl2psPrintTeXHeader();
@@ -4750,7 +4782,11 @@ static void gl2psPrintPDFBeginViewport(GLint viewport[4])
   GLfloat rgba[4];
   int x = viewport[0], y = viewport[1], w = viewport[2], h = viewport[3];
   
+#ifdef HAVE_GLES
+    // Missing XXXXXXXX
+#else
   glRenderMode(GL_FEEDBACK);
+#endif
   
   if(gl2ps->header){
     gl2psPrintPDFHeader();
@@ -4764,7 +4800,11 @@ static void gl2psPrintPDFBeginViewport(GLint viewport[4])
       glGetFloatv(GL_COLOR_CLEAR_VALUE, rgba);
     }
     else{
+#ifdef HAVE_GLES
+    // Missing XXXXXXXX
+#else
       glGetIntegerv(GL_INDEX_CLEAR_VALUE, &index);
+#endif
       rgba[0] = gl2ps->colormap[index][0];
       rgba[1] = gl2ps->colormap[index][1];
       rgba[2] = gl2ps->colormap[index][2];
@@ -5126,7 +5166,11 @@ static void gl2psPrintSVGBeginViewport(GLint viewport[4])
   GLfloat rgba[4];
   int x = viewport[0], y = viewport[1], w = viewport[2], h = viewport[3];
 
+#ifdef HAVE_GLES
+    // Missing XXXXXXXX
+#else
   glRenderMode(GL_FEEDBACK);
+#endif
   
   if(gl2ps->header){
     gl2psPrintSVGHeader();
@@ -5138,7 +5182,11 @@ static void gl2psPrintSVGBeginViewport(GLint viewport[4])
       glGetFloatv(GL_COLOR_CLEAR_VALUE, rgba);
     }
     else{
+#ifdef HAVE_GLES
+    // Missing XXXXXXXX
+#else
       glGetIntegerv(GL_INDEX_CLEAR_VALUE, &index);
+#endif
       rgba[0] = gl2ps->colormap[index][0];
       rgba[1] = gl2ps->colormap[index][1];
       rgba[2] = gl2ps->colormap[index][2];
@@ -5355,7 +5403,11 @@ static void gl2psPrintPGFBeginViewport(GLint viewport[4])
   GLfloat rgba[4];
   int x = viewport[0], y = viewport[1], w = viewport[2], h = viewport[3];
 
+#ifdef HAVE_GLES
+    // Missing XXXXXXXX
+#else
   glRenderMode(GL_FEEDBACK);
+#endif
 
   if(gl2ps->header){
     gl2psPrintPGFHeader();
@@ -5368,7 +5420,11 @@ static void gl2psPrintPGFBeginViewport(GLint viewport[4])
       glGetFloatv(GL_COLOR_CLEAR_VALUE, rgba);
     }
     else{
+#ifdef HAVE_GLES
+    // Missing XXXXXXXX
+#else
       glGetIntegerv(GL_INDEX_CLEAR_VALUE, &index);
+#endif
       rgba[0] = gl2ps->colormap[index][0];
       rgba[1] = gl2ps->colormap[index][1];
       rgba[2] = gl2ps->colormap[index][2];
@@ -5457,7 +5513,11 @@ static GLint gl2psPrintPrimitives(void)
   GL2PSxyz eye = {0.0F, 0.0F, 100.0F * GL2PS_ZSCALE};
   GLint used;
 
+#ifdef HAVE_GLES
+    // Missing XXXXXXXX
+#else
   used = glRenderMode(GL_RENDER);
+#endif
 
   if(used < 0){
     gl2psMsg(GL2PS_INFO, "OpenGL feedback buffer overflow");
@@ -5631,14 +5691,20 @@ GL2PSDLL_API GLint gl2psBeginPage(const char *title, const char *producer,
   /* get default blending mode from current OpenGL state (enabled by
      default for SVG) */
   gl2ps->blending = (gl2ps->format == GL2PS_SVG) ? GL_TRUE : glIsEnabled(GL_BLEND);
+#ifdef HAVE_GLES
+    // Missing XXXXXXXX
+#else
   glGetIntegerv(GL_BLEND_SRC, &gl2ps->blendfunc[0]);
   glGetIntegerv(GL_BLEND_DST, &gl2ps->blendfunc[1]);
-
+#endif
   if(gl2ps->colormode == GL_RGBA){
     gl2ps->colorsize = 0;
     gl2ps->colormap = NULL;
     glGetFloatv(GL_COLOR_CLEAR_VALUE, gl2ps->bgcolor);
   }
+#ifdef HAVE_GLES
+    // Missing XXXXXXXX
+#else
   else if(gl2ps->colormode == GL_COLOR_INDEX){
     if(!colorsize || !colormap){
       gl2psMsg(GL2PS_ERROR, "Missing colormap for GL_COLOR_INDEX rendering");
@@ -5655,6 +5721,7 @@ GL2PSDLL_API GLint gl2psBeginPage(const char *title, const char *producer,
     gl2ps->bgcolor[2] = gl2ps->colormap[index][2];
     gl2ps->bgcolor[3] = 1.0F;
   }
+#endif
   else{
     gl2psMsg(GL2PS_ERROR, "Unknown color mode in gl2psBeginPage");
     gl2psFree(gl2ps);
@@ -5692,9 +5759,12 @@ GL2PSDLL_API GLint gl2psBeginPage(const char *title, const char *producer,
   gl2ps->primitives = gl2psListCreate(500, 500, sizeof(GL2PSprimitive*));
   gl2ps->auxprimitives = gl2psListCreate(100, 100, sizeof(GL2PSprimitive*));
   gl2ps->feedback = (GLfloat*)gl2psMalloc(gl2ps->buffersize * sizeof(GLfloat));
+#ifdef HAVE_GLES
+    // Missing XXXXXXXX
+#else
   glFeedbackBuffer(gl2ps->buffersize, GL_3D_COLOR, gl2ps->feedback);
   glRenderMode(GL_FEEDBACK);  
-
+#endif
   return GL2PS_SUCCESS;
 }
 
@@ -5783,11 +5853,18 @@ GL2PSDLL_API GLint gl2psDrawPixels(GLsizei width, GLsizei height,
     return GL2PS_ERROR;
   }
 
+#ifdef HAVE_GLES
+    // Missing XXXXXXXX
+#else
   glGetBooleanv(GL_CURRENT_RASTER_POSITION_VALID, &valid);
+#endif
   if(GL_FALSE == valid) return GL2PS_SUCCESS; /* the primitive is culled */
 
+#ifdef HAVE_GLES
+    // Missing XXXXXXXX
+#else
   glGetFloatv(GL_CURRENT_RASTER_POSITION, pos);
-
+#endif
   prim = (GL2PSprimitive*)gl2psMalloc(sizeof(GL2PSprimitive));
   prim->type = GL2PS_PIXMAP;
   prim->boundary = 0;
@@ -5801,7 +5878,11 @@ GL2PSDLL_API GLint gl2psDrawPixels(GLsizei width, GLsizei height,
   prim->pattern = 0;
   prim->factor = 0;
   prim->width = 1;
+#ifdef HAVE_GLES
+    // Missing XXXXXXXX
+#else
   glGetFloatv(GL_CURRENT_RASTER_COLOR, prim->verts[0].rgba);
+#endif
   prim->data.image = (GL2PSimage*)gl2psMalloc(sizeof(GL2PSimage));
   prim->data.image->width = width;
   prim->data.image->height = height;
@@ -5884,9 +5965,17 @@ GL2PSDLL_API GLint gl2psEnable(GLint mode)
     break;
   case GL2PS_LINE_STIPPLE :
     glPassThrough(GL2PS_BEGIN_STIPPLE_TOKEN);
+#ifdef HAVE_GLES
+    // Missing XXXXXXXX
+#else
     glGetIntegerv(GL_LINE_STIPPLE_PATTERN, &tmp);
+#endif
     glPassThrough((GLfloat)tmp);
+#ifdef HAVE_GLES
+    // Missing XXXXXXXX
+#else
     glGetIntegerv(GL_LINE_STIPPLE_REPEAT, &tmp);
+#endif
     glPassThrough((GLfloat)tmp);
     break;
   case GL2PS_BLEND :
