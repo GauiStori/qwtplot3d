@@ -9,76 +9,71 @@
 #endif
 #include <GL/glu.h>
 
-namespace Qwt3D
-{
+namespace Qwt3D {
 
 #ifndef QWT3D_NOT_FOR_DOXYGEN
 
 class GLStateBewarer
 {
 public:
-	
-	GLStateBewarer(GLenum what, bool on, bool persist=false)
-	{
-		state_ = what;
-		stateval_ = glIsEnabled(what);	
-		if (on)
-			turnOn(persist);
-		else
-			turnOff(persist);
-	}
+    GLStateBewarer(GLenum what, bool on, bool persist = false)
+    {
+        state_ = what;
+        stateval_ = glIsEnabled(what);
+        if (on)
+            turnOn(persist);
+        else
+            turnOff(persist);
+    }
 
-	~GLStateBewarer() 
-	{
-		if (stateval_)
-			glEnable(state_);
-		else
-			glDisable(state_);
-	}
-	
-	void turnOn(bool persist = false)
-	{
-		glEnable(state_);
-		if (persist)
-			stateval_ = true;
-	}
-	
-	void turnOff(bool persist = false)
-	{
-		glDisable(state_);
-		if (persist)
-			stateval_ = false;
-	}
+    ~GLStateBewarer()
+    {
+        if (stateval_)
+            glEnable(state_);
+        else
+            glDisable(state_);
+    }
 
+    void turnOn(bool persist = false)
+    {
+        glEnable(state_);
+        if (persist)
+            stateval_ = true;
+    }
+
+    void turnOff(bool persist = false)
+    {
+        glDisable(state_);
+        if (persist)
+            stateval_ = false;
+    }
 
 private:
-	
-	GLenum state_;
-	bool stateval_;
-
+    GLenum state_;
+    bool stateval_;
 };
 
-inline const GLubyte* gl_error()
+inline const GLubyte *gl_error()
 {
-	GLenum errcode;
-	const GLubyte* err = 0;
-	
-	if ((errcode = glGetError()) != GL_NO_ERROR)
-	{
+    GLenum errcode;
+    const GLubyte *err = 0;
+
+    if ((errcode = glGetError()) != GL_NO_ERROR)
+    {
 #ifdef HAVE_GLES
         // Missing XXXXXXXX
 #else
         err = gluErrorString(errcode);
 #endif
-	}
-	return err;
+    }
+    return err;
 }
 
-inline	void SaveGlDeleteLists(GLuint& lstidx, GLsizei range)
+inline void SaveGlDeleteLists(GLuint &lstidx, GLsizei range)
 {
-	if (glIsList(lstidx))
-		glDeleteLists(lstidx, range);
-	lstidx = 0;
+    if (glIsList(lstidx))
+        glDeleteLists(lstidx, range);
+    lstidx = 0;
 }
 
 //! get OpenGL transformation matrices
@@ -88,57 +83,58 @@ inline	void SaveGlDeleteLists(GLuint& lstidx, GLsizei range)
 	\param projMatrix should be a GLdouble[16]
 	\param viewport should be a GLint[4]
 */
-inline void getMatrices(GLdouble* modelMatrix, GLdouble* projMatrix, GLint* viewport)
+inline void getMatrices(GLdouble *modelMatrix, GLdouble *projMatrix, GLint *viewport)
 {
-	glGetIntegerv(GL_VIEWPORT, viewport);
-	glGetDoublev(GL_MODELVIEW_MATRIX,	modelMatrix);
-	glGetDoublev(GL_PROJECTION_MATRIX,	projMatrix);
+    glGetIntegerv(GL_VIEWPORT, viewport);
+    glGetDoublev(GL_MODELVIEW_MATRIX, modelMatrix);
+    glGetDoublev(GL_PROJECTION_MATRIX, projMatrix);
 }
 
-//! simplified glut routine (glUnProject): windows coordinates_p --> object coordinates_p 
+//! simplified glut routine (glUnProject): windows coordinates_p --> object coordinates_p
 /**
 	Don't rely on (use) this in display lists !
 */
-inline bool ViewPort2World(double& objx, double& objy, double& objz, double winx, double winy, double winz)
+inline bool ViewPort2World(
+    double &objx, double &objy, double &objz, double winx, double winy, double winz)
 {
-	GLdouble modelMatrix[16];
-  GLdouble projMatrix[16];
-  GLint viewport[4];
+    GLdouble modelMatrix[16];
+    GLdouble projMatrix[16];
+    GLint viewport[4];
 
-	getMatrices(modelMatrix, projMatrix, viewport);
+    getMatrices(modelMatrix, projMatrix, viewport);
 #ifdef HAVE_GLES
     // Missing XXXXXXXX
     int res = GL_FALSE;
 #else
-	int res = gluUnProject(winx, winy, winz, modelMatrix, projMatrix, viewport, &objx, &objy, &objz);
+    int res = gluUnProject(winx, winy, winz, modelMatrix, projMatrix, viewport, &objx, &objy, &objz);
 #endif
-	return (res == GL_FALSE) ? false : true;
+    return (res == GL_FALSE) ? false : true;
 }
 
-//! simplified glut routine (glProject): object coordinates_p --> windows coordinates_p 
+//! simplified glut routine (glProject): object coordinates_p --> windows coordinates_p
 /**
 	Don't rely on (use) this in display lists !
 */
-inline bool World2ViewPort(double& winx, double& winy, double& winz, double objx, double objy, double objz )
+inline bool World2ViewPort(
+    double &winx, double &winy, double &winz, double objx, double objy, double objz)
 {
-	GLdouble modelMatrix[16];
-  GLdouble projMatrix[16];
-  GLint viewport[4];
+    GLdouble modelMatrix[16];
+    GLdouble projMatrix[16];
+    GLint viewport[4];
 
-	getMatrices(modelMatrix, projMatrix, viewport);
+    getMatrices(modelMatrix, projMatrix, viewport);
 #ifdef HAVE_GLES
     // Missing XXXXXXXX
     int res = GL_FALSE;
 #else
-	int res = gluProject(objx, objy, objz, modelMatrix, projMatrix, viewport, &winx, &winy, &winz);
+    int res = gluProject(objx, objy, objz, modelMatrix, projMatrix, viewport, &winx, &winy, &winz);
 #endif
 
-	return (res == GL_FALSE) ? false : true;
+    return (res == GL_FALSE) ? false : true;
 }
-
 
 #endif // QWT3D_NOT_FOR_DOXYGEN
 
-} // ns
+} // namespace Qwt3D
 
 #endif
