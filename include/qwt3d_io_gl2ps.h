@@ -2,14 +2,15 @@
 #define qwt3d_io_gl2ps_h__2004_05_07_01_16_begin_guarded_code
 
 #include <time.h>
+#include <QtGlobal>
 
-/*#if QT_VERSION < 0x040000 FIXME
+#if QT_VERSION < 0x040000
 #include <qgl.h>
 #elif QT_VERSION < 0x060000
 #include <QtOpenGL/qgl.h>
-#else*/
+#else
 #include <QOpenGLWidget>
-//#endif
+#endif
 
 #include "qwt3d_io.h"
 #include "qwt3d_types.h"
