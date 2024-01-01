@@ -1,15 +1,15 @@
-#include <qaction.h>
-#include <qcheckbox.h>
-#include <qcombobox.h>
-#include <qdatetime.h>
-#include <qlayout.h>
-#include <qmenubar.h>
-#include <qslider.h>
 #include <qsplitter.h>
+#include <qlayout.h>
+#include <qcombobox.h>
+#include <qaction.h>
+#include <qslider.h>
+#include <qcheckbox.h>
+#include <qmenubar.h>
+#include <qdatetime.h>
 
-#include "../../../include/qwt3d_function.h"
 #include "axes.h"
 #include "axesmainwindow.h"
+#include <qwt3d_function.h>
 
 using namespace std;
 using namespace Qwt3D;

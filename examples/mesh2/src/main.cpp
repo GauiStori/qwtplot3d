@@ -10,13 +10,15 @@
 
 int main(int argc, char **argv)
 {
+#if QT_VERSION < 0x060000 // FIXME
     QApplication::setColorSpec(QApplication::CustomColor);
+#endif
     QApplication app(argc, argv);
 
-    if (!QGLFormat::hasOpenGL()) {
+    /* FIXME if (!QGLFormat::hasOpenGL()) {
         qWarning("This system has no OpenGL support. Exiting.");
         return -1;
-    }
+    }*/
 
     Mesh2MainWindow mainwindow;
 

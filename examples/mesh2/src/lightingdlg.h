@@ -1,12 +1,12 @@
 #ifndef lightingdlg_h__2004_03_07_13_35_begin_guarded_code
 #define lightingdlg_h__2004_03_07_13_35_begin_guarded_code
 
-#include "../../../include/qwt3d_color.h"
-#include "../../../include/qwt3d_enrichment.h"
-#include "../../../include/qwt3d_parametricsurface.h"
-#include "../../../include/qwt3d_surfaceplot.h"
 #include <math.h>
 #include <qapplication.h>
+#include <qwt3d_parametricsurface.h>
+#include <qwt3d_surfaceplot.h>
+#include <qwt3d_enrichment.h>
+#include <qwt3d_color.h>
 
 #if QT_VERSION < 0x040000
 #include "lightingdlgbase.h"

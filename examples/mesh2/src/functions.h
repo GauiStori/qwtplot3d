@@ -1,9 +1,9 @@
 #ifndef __EXAMPLE_H__
 #define __EXAMPLE_H__
 
-#include "../../../include/qwt3d_function.h"
-#include "../../../include/qwt3d_parametricsurface.h"
 #include <math.h>
+#include <qwt3d_parametricsurface.h>
+#include <qwt3d_function.h>
 
 using namespace Qwt3D;
 

@@ -1,7 +1,8 @@
 #ifndef mesh2mainwindow_h__2004_03_07_13_38_begin_guarded_code
 #define mesh2mainwindow_h__2004_03_07_13_38_begin_guarded_code
 
-#include "../../../include/qwt3d_surfaceplot.h"
+#include <qwt3d_surfaceplot.h>
+
 
 #if QT_VERSION < 0x040000
 #include "mesh2mainwindowbase.h"

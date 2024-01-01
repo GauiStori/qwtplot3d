@@ -1,13 +1,13 @@
 #ifndef designerworkaround_h__2005_07_10_10_46_begin_guarded_code
 #define designerworkaround_h__2005_07_10_10_46_begin_guarded_code
 
-#include <QtGui/QAction>
-#include <QtGui/QActionGroup>
-#include <QtGui/QComboBox>
-#include <QtGui/QMainWindow>
-#include <QtGui/QMenu>
-#include <QtGui/QMenuBar>
-#include <QtGui/QToolBar>
+#include <QAction>
+#include <QActionGroup>
+#include <QComboBox>
+#include <QMainWindow>
+#include <QMenu>
+#include <QMenuBar>
+#include <QToolBar>
 
 class DesignerWorkaround
 {
