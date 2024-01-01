@@ -14,6 +14,9 @@ using namespace Qwt3D;
 #if QT_VERSION < 0x040000
 Plot3D::Plot3D(QWidget *parent, const char *name)
     : QGLWidget(parent, name)
+#elif QT_VERSION < 0x060000
+Plot3D::Plot3D(QWidget *parent, const QGLWidget *shareWidget)
+    : QGLWidget(parent, shareWidget)
 #else
 Plot3D::Plot3D(QWidget *parent, const QGLWidget *shareWidget)
     : QGLWidget(parent) // FIXMEshareWidget)
