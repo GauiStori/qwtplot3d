@@ -51,6 +51,8 @@ void Plot::rotate()
     setRotation((int(prec * xRotation() + 2) % (360 * prec)) / double(prec),
                 (int(prec * yRotation() + 2) % (360 * prec)) / double(prec),
                 (int(prec * zRotation() + 2) % (360 * prec)) / double(prec));
+    updateData();
+    updateGL();
 }
 
 int main(int argc, char **argv)
