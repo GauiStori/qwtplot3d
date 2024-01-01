@@ -26,6 +26,6 @@ int main(int argc, char **argv)
 #endif
 
     mainwindow.show();
-
+    mainwindow.updatePlot();
     return app.exec();
 }

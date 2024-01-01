@@ -54,6 +54,8 @@ public slots:
     void letterItems();
     void timeItems();
     void customScale();
+    void updatePlot();
+
 
 private:
     int tics;

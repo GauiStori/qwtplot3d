@@ -235,3 +235,9 @@ void AxesMainWindow::customScale()
 
     plot->updateGL();
 }
+
+void AxesMainWindow::updatePlot()
+{
+    plot->updateData();
+    plot->updateGL();
+}
