@@ -28,7 +28,7 @@ win32:QMAKE_CXXFLAGS     += $$QMAKE_CFLAGS_STL
 win32:CONFIG -= zlib
 
 linux-g++:TMAKE_CXXFLAGS += -fno-exceptions
-unix:VERSION = 0.2.7
+unix:VERSION = 0.2.7.1
 
 # Input
 SOURCES += src/qwt3d_axis.cpp \
