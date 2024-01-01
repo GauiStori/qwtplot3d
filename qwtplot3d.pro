@@ -1,17 +1,23 @@
 # pro file for building the makefile for qwtplot3d
 #
 
-TARGET            = qwtplot3d
+TARGET = qwtplot3d-qt$$QT_MAJOR_VERSION
 TEMPLATE          = lib
 CONFIG           += qt warn_on opengl thread zlib debug
 MOC_DIR           = tmp
 OBJECTS_DIR       = tmp
 INCLUDEPATH       = include
 DEPENDPATH        = include src
-DESTDIR      			= lib
-#DESTDIR      			= ../../../lib
-#QT += opengl
-QT += core gui widgets opengl openglwidgets
+DESTDIR           = lib
+unix:LIBS        += -lGLU
+win32:LIBS       += -lglu32
+#DESTDIR          = ../../../lib
+greaterThan(QT_MAJOR_VERSION,5) {
+  QT += core gui widgets opengl openglwidgets
+}
+else {
+  QT += opengl
+}
 
 win32:TEMPLATE    = vclib
 win32:CONFIG     += dll exceptions
