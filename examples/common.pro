@@ -16,12 +16,7 @@ linux-g++:QMAKE_CXXFLAGS += -fno-exceptions
 
 unix{
   unix:LIBS += -lqwtplot3d-qt$$QT_MAJOR_VERSION
-  greaterThan(QT_MAJOR_VERSION, 4) {
-    INCLUDEPATH    += /usr/include/qwtplot3d
-  }
-  else {
-    INCLUDEPATH    += /usr/include/qwtplot3d-qt4
-  }
+  INCLUDEPATH    += /usr/include/qwtplot3d
 }
 
 DEPENDPATH	= $$INCLUDEPATH
