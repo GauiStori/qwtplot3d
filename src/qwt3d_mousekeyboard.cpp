@@ -134,7 +134,8 @@ void Plot3D::wheelEvent(QWheelEvent *e)
 
     double accel = 0.05;
 
-    double step = accel * e->delta() / WHEEL_DELTA;
+    // double step = accel * e->delta() / WHEEL_DELTA;
+    double step = accel * e->angleDelta().rx() / WHEEL_DELTA; // Check FIXME
     step = exp(step) - 1;
 
 #if QT_VERSION < 0x040000

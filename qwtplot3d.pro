@@ -10,7 +10,8 @@ INCLUDEPATH       = include
 DEPENDPATH        = include src
 DESTDIR      			= lib
 #DESTDIR      			= ../../../lib
-QT += opengl
+#QT += opengl
+QT += core gui widgets opengl openglwidgets
 
 win32:TEMPLATE    = vclib
 win32:CONFIG     += dll exceptions

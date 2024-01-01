@@ -70,6 +70,7 @@ void Drawable::detach(Drawable *dr)
         dlist.erase(it);
     }
 }
+
 void Drawable::detachAll()
 {
     dlist.clear();

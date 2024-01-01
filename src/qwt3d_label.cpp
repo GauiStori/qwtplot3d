@@ -173,7 +173,7 @@ void Label::update()
     buf_ = pm_.toImage();
 #endif
 
-    tex_ = QGLWidget::convertToGLFormat(buf_); // flipped 32bit RGBA ?
+    // FIXME tex_ = QGLWidget::convertToGLFormat(buf_); // flipped 32bit RGBA ?
 }
 
 /**

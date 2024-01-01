@@ -4,8 +4,12 @@
 #include "qglobal.h"
 #if QT_VERSION < 0x040000
 #include <qgl.h>
-#else
+#elif QT_VERSION < 0x060000
 #include <QtOpenGL/qgl.h>
+#else
+#include <QOpenGLWidget>
+#define updateGL update
+#define QGLWidget QOpenGLWidget
 #endif
 #include <GL/glu.h>
 
