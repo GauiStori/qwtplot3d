@@ -28,6 +28,7 @@ class Plot : public SurfacePlot
 {
 public:
     Plot();
+    void updatePlot();
 };
 
 Plot::Plot()
@@ -62,6 +63,12 @@ Plot::Plot()
     updateGL();
 }
 
+void Plot::updatePlot()
+{
+    updateData();
+    updateGL();
+}
+
 int main(int argc, char **argv)
 {
     QApplication a(argc, argv);
@@ -71,5 +78,6 @@ int main(int argc, char **argv)
 #endif
     plot.resize(800, 600);
     plot.show();
+    plot.updatePlot(); // Workaround for Qt6
     return a.exec();
 }
