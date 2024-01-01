@@ -160,13 +160,13 @@ Mesh2MainWindow::Mesh2MainWindow(QWidget *parent)
     connect(dataWidget, SIGNAL(zoomChanged(double)), this, SLOT(showZoom(double)));
 
     connect(functionCB,
-            SIGNAL(activated(const QString &)),
+            SIGNAL(activated(int)),
             this,
-            SLOT(createFunction(const QString &)));
+            SLOT(createFunction(int)));
     connect(psurfaceCB,
-            SIGNAL(activated(const QString &)),
+            SIGNAL(activated(int)),
             this,
-            SLOT(createPSurface(const QString &)));
+            SLOT(createPSurface(int)));
     connect(projection, SIGNAL(toggled(bool)), this, SLOT(toggleProjectionMode(bool)));
     connect(colorlegend, SIGNAL(toggled(bool)), this, SLOT(toggleColorLegend(bool)));
     connect(autoscale, SIGNAL(toggled(bool)), this, SLOT(toggleAutoScale(bool)));
@@ -205,9 +205,9 @@ Mesh2MainWindow::Mesh2MainWindow(QWidget *parent)
     //connect(datacolordlg_, SIGNAL(filesSelected(const QStringList&)), this, SLOT(adaptDataColors4(const QStringList&)));
 #endif
     connect(filetypeCB,
-            SIGNAL(activated(const QString &)),
+            SIGNAL(activated(int)),
             this,
-            SLOT(setFileType(const QString &)));
+            SLOT(setFileType(int)));
 
     filetypeCB->clear();
 
@@ -282,8 +282,9 @@ void Mesh2MainWindow::open()
     dataWidget->showColorLegend(legend_);
 }
 
-void Mesh2MainWindow::createFunction(QString const &name)
+void Mesh2MainWindow::createFunction(int i)
 {
+    QString name = functionCB->itemText(i);
     dataWidget->makeCurrent();
 
     dataWidget->legend()->setScale(LINEARSCALE);
@@ -359,8 +360,10 @@ void Mesh2MainWindow::createFunction(QString const &name)
     pickCoordSystem(activeCoordSystem);
 }
 
-void Mesh2MainWindow::createPSurface(QString const &name)
+void Mesh2MainWindow::createPSurface(int i)
 {
+    QString name = psurfaceCB->itemText(i);
+
     dataWidget->makeCurrent();
     if (name == QString("Torus")) {
         Torus sf(*dataWidget);
@@ -885,8 +888,9 @@ void Mesh2MainWindow::updateColorLegend(int majors, int minors)
     dataWidget->legend()->setLimits(start, stop);
 }
 
-void Mesh2MainWindow::setFileType(QString const &name)
+void Mesh2MainWindow::setFileType(int i)
 {
+    QString name = filetypeCB->itemText(i);
     filetype_ = name;
 }
 

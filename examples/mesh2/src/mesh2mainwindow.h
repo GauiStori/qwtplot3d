@@ -51,9 +51,9 @@ public slots:
     void open();
     void openMesh();
 
-    void createFunction(QString const &name);
-    void createPSurface(QString const &name);
-    void setFileType(QString const &name);
+    void createFunction(int i);
+    void createPSurface(int i);
+    void setFileType(int i);
 
     void pickCoordSystem(QAction *);
     void pickPlotStyle(QAction *);
