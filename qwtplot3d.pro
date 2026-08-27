@@ -9,8 +9,15 @@ OBJECTS_DIR       = tmp
 INCLUDEPATH       = include
 DEPENDPATH        = include src
 DESTDIR           = lib
-unix:LIBS         += -lGLU
-win32:LIBS        += -lglu32
+
+contains(CONFIG, gles) {
+  DEFINES         += HAVE_GLES
+  unix:LIBS       += -lGLESv1_CM
+  win32:LIBS      += -lGLESv1_CM
+} else {
+  unix:LIBS       += -lGLU
+  win32:LIBS      += -lglu32
+}
 
 greaterThan(QT_MAJOR_VERSION, 5) {
   QT += core gui widgets opengl openglwidgets
