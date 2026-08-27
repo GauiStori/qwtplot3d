@@ -270,7 +270,11 @@ GLint Qwt3D::setDeviceLineWidth(GLfloat val)
     GLint ret = gl2psLineWidth(val);
 
     GLfloat lw[2];
+#ifdef HAVE_GLES
+    glGetFloatv(GL_ALIASED_LINE_WIDTH_RANGE, lw);
+#else
     glGetFloatv(GL_LINE_WIDTH_RANGE, lw);
+#endif
 
     if (val < lw[0])
         val = lw[0];
@@ -289,7 +293,11 @@ GLint Qwt3D::setDevicePointSize(GLfloat val)
     GLint ret = gl2psPointSize(val);
 
     GLfloat lw[2];
+#ifdef HAVE_GLES
+    glGetFloatv(GL_ALIASED_POINT_SIZE_RANGE, lw);
+#else
     glGetFloatv(GL_POINT_SIZE_RANGE, lw);
+#endif
 
     if (val < lw[0])
         val = lw[0];

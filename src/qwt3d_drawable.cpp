@@ -11,16 +11,31 @@ Drawable::~Drawable()
 void Drawable::saveGLState()
 {
     glGetBooleanv(GL_LINE_SMOOTH, &ls);
+#ifdef HAVE_GLES
+    pols = GL_FALSE;
+#else
     glGetBooleanv(GL_POLYGON_SMOOTH, &pols);
+#endif
     glGetFloatv(GL_LINE_WIDTH, &lw);
     glGetIntegerv(GL_BLEND_SRC, &blsrc);
     glGetIntegerv(GL_BLEND_DST, &bldst);
     glGetDoublev(GL_CURRENT_COLOR, col);
+#ifdef HAVE_GLES
+    pattern = 0;
+    factor = 1;
+    sallowed = GL_FALSE;
+#else
     glGetIntegerv(GL_LINE_STIPPLE_PATTERN, &pattern);
     glGetIntegerv(GL_LINE_STIPPLE_REPEAT, &factor);
     glGetBooleanv(GL_LINE_STIPPLE, &sallowed);
+#endif
     glGetBooleanv(GL_TEXTURE_2D, &tex2d);
+#ifdef HAVE_GLES
+    polmode[0] = GL_FRONT_AND_BACK;
+    polmode[1] = GL_FILL;
+#else
     glGetIntegerv(GL_POLYGON_MODE, polmode);
+#endif
     glGetIntegerv(GL_MATRIX_MODE, &matrixmode);
     glGetFloatv(GL_POLYGON_OFFSET_FACTOR, &poloffs[0]);
     glGetFloatv(GL_POLYGON_OFFSET_UNITS, &poloffs[1]);
@@ -30,14 +45,18 @@ void Drawable::saveGLState()
 void Drawable::restoreGLState()
 {
     Enable(GL_LINE_SMOOTH, ls);
+#ifndef HAVE_GLES
     Enable(GL_POLYGON_SMOOTH, pols);
+#endif
 
     setDeviceLineWidth(lw);
     glBlendFunc(blsrc, bldst);
     glColor4dv(col);
 
     glLineStipple(factor, pattern);
+#ifndef HAVE_GLES
     Enable(GL_LINE_STIPPLE, sallowed);
+#endif
     Enable(GL_TEXTURE_2D, tex2d);
     glPolygonMode(polmode[0], polmode[1]);
     glMatrixMode(matrixmode);
@@ -86,22 +105,11 @@ Triple Drawable::ViewPort2World(Triple win, bool *err)
     Triple obj;
 
     getMatrices(modelMatrix, projMatrix, viewport);
-/*#ifdef HAVE_GLES
+#ifdef HAVE_GLES
     int res = glesUnProject(win.x, win.y, win.z, modelMatrix, projMatrix, viewport, &obj.x, &obj.y, &obj.z);
 #else
     int res = gluUnProject(win.x, win.y, win.z, modelMatrix, projMatrix, viewport, &obj.x, &obj.y, &obj.z);
-#endif*/
-
-    getMatrices(modelMatrix, projMatrix, viewport);
-    int res = gluUnProject(win.x,
-                           win.y,
-                           win.z,
-                           modelMatrix,
-                           projMatrix,
-                           viewport,
-                           &obj.x,
-                           &obj.y,
-                           &obj.z);
+#endif
 
     if (err)
         *err = (res) ? false : true;

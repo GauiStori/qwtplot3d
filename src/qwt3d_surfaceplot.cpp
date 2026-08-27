@@ -92,9 +92,14 @@ void SurfacePlot::setResolution(int res)
 
 void SurfacePlot::updateNormals()
 {
+#ifdef HAVE_GLES
+    if (initializedGL())
+        updateGL();
+    return;
+#else
     SaveGlDeleteLists(displaylists_p[NormalObject], 1);
 
-    if (plotStyle() == NOPLOT && !normals() || !actualData_p)
+    if ((plotStyle() == NOPLOT && !normals()) || !actualData_p)
         return;
 
     displaylists_p[NormalObject] = glGenLists(1);
@@ -106,6 +111,17 @@ void SurfacePlot::updateNormals()
         createNormalsG();
 
     glEndList();
+#endif
+}
+
+void SurfacePlot::createNormalData()
+{
+    if ((plotStyle() == NOPLOT && !normals()) || !actualData_p)
+        return;
+    if (actualData_p->datatype == Qwt3D::POLYGON)
+        createNormalsC();
+    else if (actualData_p->datatype == Qwt3D::GRID)
+        createNormalsG();
 }
 
 void SurfacePlot::createData()

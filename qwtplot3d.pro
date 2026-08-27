@@ -3,7 +3,7 @@
 
 TARGET = qwtplot3d-qt$$QT_MAJOR_VERSION
 TEMPLATE          = lib
-CONFIG           += qt warn_on opengl thread zlib debug
+CONFIG           += qt warn_on thread zlib debug
 MOC_DIR           = tmp
 OBJECTS_DIR       = tmp
 INCLUDEPATH       = include
@@ -12,15 +12,20 @@ DESTDIR           = lib
 
 contains(CONFIG, gles) {
   DEFINES         += HAVE_GLES
+  QMAKE_LIBS_OPENGL =
   unix:LIBS       += -lGLESv1_CM
   win32:LIBS      += -lGLESv1_CM
 } else {
+  CONFIG         += opengl
   unix:LIBS       += -lGLU
   win32:LIBS      += -lglu32
 }
 
 greaterThan(QT_MAJOR_VERSION, 5) {
   QT += core gui widgets opengl openglwidgets
+} else:greaterThan(QT_MAJOR_VERSION, 4) {
+  QT += core gui widgets
+  !contains(CONFIG, gles):QT += opengl
 } else {
   QT += opengl
 }
@@ -43,6 +48,7 @@ SOURCES += src/qwt3d_axis.cpp \
            src/qwt3d_drawable.cpp \
            src/qwt3d_mousekeyboard.cpp \
            src/qwt3d_movements.cpp \
+           src/qwt3d_openglhelper.cpp \
            src/qwt3d_lighting.cpp \
            src/qwt3d_colorlegend.cpp \
            src/qwt3d_plot.cpp \
@@ -71,6 +77,7 @@ HEADERS += include/qwt3d_color.h \
            include/qwt3d_drawable.h \
            include/qwt3d_helper.h \
            include/qwt3d_label.h \
+           include/qwt3d_openglhelper.h \
            include/qwt3d_colorlegend.h \
            include/qwt3d_plot.h \
            include/qwt3d_enrichment.h \

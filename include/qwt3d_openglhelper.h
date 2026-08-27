@@ -4,27 +4,78 @@
 #include "qglobal.h"
 #if QT_VERSION < 0x040000
 #include <qgl.h>
-#elif QT_VERSION < 0x060000
+#elif QT_VERSION < 0x050400
+#include <QtOpenGL/qgl.h>
+#elif QT_VERSION < 0x060000 && !defined(HAVE_GLES)
 #include <QtOpenGL/qgl.h>
 #else
 #include <QOpenGLWidget>
 #define updateGL update
 #define QGLWidget QOpenGLWidget
 #endif
-#include <GL/glu.h>
 
 #ifdef HAVE_GLES
 #include <GLES/gl.h>
 #include <GLES/glext.h>
-int glesProject(float objX, float objY, float objZ,
-                 const GLdouble* modelview, const GLdouble* projection,
-                 const int* viewport,
-                 double* winX, double* winY, double* winZ);
-int glesUnProject(float winX, float winY, float winZ,
-               const GLdouble* modelview, const GLdouble* projection,
-               const int* viewport,
-               double* objX, double* objY, double* objZ);
-const char* glesErrorString(GLenum error);
+#ifndef GLdouble
+typedef double GLdouble;
+#endif
+
+#ifndef GL_QUADS
+#define GL_QUADS 0x0007
+#endif
+#ifndef GL_POLYGON
+#define GL_POLYGON 0x0009
+#endif
+
+void qwt3dGlBegin(GLenum mode);
+void qwt3dGlEnd();
+void qwt3dGlVertex3d(GLdouble x, GLdouble y, GLdouble z);
+void qwt3dGlVertex3dv(const GLdouble *v);
+void qwt3dGlNormal3d(GLdouble x, GLdouble y, GLdouble z);
+void qwt3dGlNormal3dv(const GLdouble *v);
+void qwt3dGlColor3d(GLdouble r, GLdouble g, GLdouble b);
+void qwt3dGlColor4d(GLdouble r, GLdouble g, GLdouble b, GLdouble a);
+void qwt3dGlColor4dv(const GLdouble *rgba);
+void qwt3dGlGetDoublev(GLenum pname, GLdouble *params);
+void qwt3dGlOrtho(GLdouble left, GLdouble right, GLdouble bottom, GLdouble top,
+                  GLdouble nearValue, GLdouble farValue);
+void qwt3dGlFrustum(GLdouble left, GLdouble right, GLdouble bottom, GLdouble top,
+                    GLdouble nearValue, GLdouble farValue);
+void qwt3dGlPolygonMode(GLenum face, GLenum mode);
+void qwt3dGlLineStipple(GLint factor, GLushort pattern);
+void qwt3dGlRasterPos3d(GLdouble x, GLdouble y, GLdouble z);
+void qwt3dGlDrawPixels(GLsizei width, GLsizei height, GLenum format, GLenum type,
+                       const void *pixels);
+void qwt3dGlCylinder(GLdouble baseRadius, GLdouble topRadius, GLdouble height,
+                     GLint slices);
+void qwt3dGlDisk(GLdouble innerRadius, GLdouble outerRadius, GLint slices);
+int glesProject(GLdouble objX, GLdouble objY, GLdouble objZ,
+                const GLdouble *modelview, const GLdouble *projection,
+                const GLint *viewport, GLdouble *winX, GLdouble *winY, GLdouble *winZ);
+int glesUnProject(GLdouble winX, GLdouble winY, GLdouble winZ,
+                  const GLdouble *modelview, const GLdouble *projection,
+                  const GLint *viewport, GLdouble *objX, GLdouble *objY, GLdouble *objZ);
+const GLubyte *glesErrorString(GLenum error);
+
+#define glBegin qwt3dGlBegin
+#define glEnd qwt3dGlEnd
+#define glVertex3d qwt3dGlVertex3d
+#define glVertex3dv qwt3dGlVertex3dv
+#define glNormal3d qwt3dGlNormal3d
+#define glNormal3dv qwt3dGlNormal3dv
+#define glColor3d qwt3dGlColor3d
+#define glColor4d qwt3dGlColor4d
+#define glColor4dv qwt3dGlColor4dv
+#define glGetDoublev qwt3dGlGetDoublev
+#define glOrtho qwt3dGlOrtho
+#define glFrustum qwt3dGlFrustum
+#define glPolygonMode qwt3dGlPolygonMode
+#define glLineStipple qwt3dGlLineStipple
+#define glRasterPos3d qwt3dGlRasterPos3d
+#define glDrawPixels qwt3dGlDrawPixels
+#else
+#include <GL/glu.h>
 #endif
 
 namespace Qwt3D {
@@ -79,7 +130,7 @@ inline const GLubyte *gl_error()
     if ((errcode = glGetError()) != GL_NO_ERROR)
     {
 #ifdef HAVE_GLES
-        err = (GLubyte*) glesErrorString(errcode);
+        err = glesErrorString(errcode);
 #else
         err = gluErrorString(errcode);
 #endif
@@ -89,8 +140,12 @@ inline const GLubyte *gl_error()
 
 inline void SaveGlDeleteLists(GLuint &lstidx, GLsizei range)
 {
+#ifdef HAVE_GLES
+    (void) range;
+#else
     if (glIsList(lstidx))
         glDeleteLists(lstidx, range);
+#endif
     lstidx = 0;
 }
 

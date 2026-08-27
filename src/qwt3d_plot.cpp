@@ -14,7 +14,7 @@ using namespace Qwt3D;
 #if QT_VERSION < 0x040000
 Plot3D::Plot3D(QWidget *parent, const char *name)
     : QGLWidget(parent, name)
-#elif QT_VERSION < 0x060000
+#elif QT_VERSION < 0x060000 && !defined(HAVE_GLES)
 Plot3D::Plot3D(QWidget *parent, const QGLWidget *shareWidget)
     : QGLWidget(parent, shareWidget)
 #else
@@ -243,10 +243,16 @@ void Plot3D::paintGL()
     if (lighting_enabled_)
         glEnable(GL_NORMALIZE);
 
+#ifdef HAVE_GLES
+    createEnrichments();
+    createData();
+    createNormalData();
+#else
     for (unsigned i = 0; i != displaylists_p.size(); ++i) {
         if (i != LegendObject)
             glCallList(displaylists_p[i]);
     }
+#endif
     coordinates_p.draw();
 
     if (lighting_enabled_)
@@ -484,6 +490,9 @@ void Plot3D::updateData()
 
     calculateHull();
 
+#ifdef HAVE_GLES
+    updateGL();
+#else
     SaveGlDeleteLists(displaylists_p[DataObject], 1); // nur Daten
 
     displaylists_p[DataObject] = glGenLists(1);
@@ -493,4 +502,5 @@ void Plot3D::updateData()
     this->createData();
 
     glEndList();
+#endif
 }

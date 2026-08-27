@@ -6,7 +6,9 @@
 
 #if QT_VERSION < 0x040000
 #include <qgl.h>
-#elif QT_VERSION < 0x060000
+#elif QT_VERSION < 0x050400
+#include <QtOpenGL/qgl.h>
+#elif QT_VERSION < 0x060000 && !defined(HAVE_GLES)
 #include <QtOpenGL/qgl.h>
 #else
 #include <QOpenGLWidget>

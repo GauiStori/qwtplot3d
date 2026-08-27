@@ -98,6 +98,7 @@ protected:
 
     virtual void calculateHull();
     virtual void createData();
+    virtual void createNormalData();
     virtual void createEnrichment(Qwt3D::Enrichment &p);
     virtual void createFloorData();
     void createNormals();

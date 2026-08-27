@@ -240,10 +240,10 @@ IO::Functor *IO::outputHandler(QString const &format)
 
 bool PixmapWriter::operator()(Plot3D *plot, QString const &fname)
 {
-#if QT_VERSION < 0x060000
+#if QT_VERSION < 0x050400 || (QT_VERSION < 0x060000 && !defined(HAVE_GLES))
     QImage im = plot->grabFrameBuffer(true);
 #else
-    QImage im; // FIXME = plot->grabFrameBuffer();
+    QImage im = plot->grabFramebuffer();
 #endif
 
 #if QT_VERSION < 0x040000
