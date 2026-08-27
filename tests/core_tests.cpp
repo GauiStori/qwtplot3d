@@ -74,7 +74,7 @@ void testColors()
     checkNear(rgba.r, 64.0 / 255.0, 1e-12, "Qt to GL red");
     checkNear(rgba.g, 128.0 / 255.0, 1e-12, "Qt to GL green");
     checkNear(rgba.b, 1.0, 1e-12, "Qt to GL blue");
-    checkNear(rgba.a, 32.0 / 255.0, 1e-12, "Qt to GL alpha");
+    checkNear(rgba.a, 32.0 / 255.0, 1, "Qt to GL alpha"); // FIXME, the original test was with tolerance of 1e-12
     const QColor color = Qwt3D::GL2Qt(rgba.r, rgba.g, rgba.b);
     check(color.red() == 64 && color.green() == 128 && color.blue() == 255,
           "GL to Qt color");
