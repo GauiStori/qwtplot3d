@@ -29,10 +29,10 @@
 
 #include "mesh2mainwindow.h"
 
-#include "functions.h"
 #include "colormapreader.h"
-#include "lightingdlg.h"
 #include "femreader.h"
+#include "functions.h"
+#include "lightingdlg.h"
 #include <qwt3d_io.h>
 #include <qwt3d_io_gl2ps.h>
 #include <qwt3d_io_reader.h>
@@ -159,14 +159,8 @@ Mesh2MainWindow::Mesh2MainWindow(QWidget *parent)
             SLOT(showScale(double, double, double)));
     connect(dataWidget, SIGNAL(zoomChanged(double)), this, SLOT(showZoom(double)));
 
-    connect(functionCB,
-            SIGNAL(activated(int)),
-            this,
-            SLOT(createFunction(int)));
-    connect(psurfaceCB,
-            SIGNAL(activated(int)),
-            this,
-            SLOT(createPSurface(int)));
+    connect(functionCB, SIGNAL(activated(int)), this, SLOT(createFunction(int)));
+    connect(psurfaceCB, SIGNAL(activated(int)), this, SLOT(createPSurface(int)));
     connect(projection, SIGNAL(toggled(bool)), this, SLOT(toggleProjectionMode(bool)));
     connect(colorlegend, SIGNAL(toggled(bool)), this, SLOT(toggleColorLegend(bool)));
     connect(autoscale, SIGNAL(toggled(bool)), this, SLOT(toggleAutoScale(bool)));
@@ -204,10 +198,7 @@ Mesh2MainWindow::Mesh2MainWindow(QWidget *parent)
 #else
     //connect(datacolordlg_, SIGNAL(filesSelected(const QStringList&)), this, SLOT(adaptDataColors4(const QStringList&)));
 #endif
-    connect(filetypeCB,
-            SIGNAL(activated(int)),
-            this,
-            SLOT(setFileType(int)));
+    connect(filetypeCB, SIGNAL(activated(int)), this, SLOT(setFileType(int)));
 
     filetypeCB->clear();
 

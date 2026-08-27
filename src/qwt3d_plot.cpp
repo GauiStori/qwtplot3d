@@ -271,7 +271,7 @@ void Plot3D::resizeGL(int w, int h)
 QPixmap Plot3D::renderPixmap(int w /* =0 */, int h /* =0 */, bool useContext /* =false */)
 {
     renderpixmaprequest_ = true;
-    return QPixmap();// FIXME QGLWidget::renderPixmap(w, h, useContext);
+    return QPixmap(); // FIXME QGLWidget::renderPixmap(w, h, useContext);
 }
 
 /*!

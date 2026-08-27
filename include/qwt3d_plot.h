@@ -88,10 +88,10 @@ public:
     Qwt3D::RGBA backgroundRGBAColor() const
     {
         return bgcolor_;
-    }                                                    //!< Returns the widgets background color
-    void setMeshColor(Qwt3D::RGBA rgba);                 //!< Sets color for data mesh
-    Qwt3D::RGBA meshColor() const { return meshcolor_; } //!< Returns color for data mesh
-    void setMeshLineWidth(double lw);                    //!< Sets line width for data mesh
+    } //!< Returns the widgets background color
+    void setMeshColor(Qwt3D::RGBA rgba);                    //!< Sets color for data mesh
+    Qwt3D::RGBA meshColor() const { return meshcolor_; }    //!< Returns color for data mesh
+    void setMeshLineWidth(double lw);                       //!< Sets line width for data mesh
     double meshLineWidth() const { return meshLineWidth_; } //!< Returns line width for data mesh
     void setDataColor(Color *col);                          //!< Sets new data color object
     const Color *dataColor() const { return datacolor_p; }  //!< Returns data color object

@@ -3,7 +3,6 @@
 
 #include <qwt3d_surfaceplot.h>
 
-
 #if QT_VERSION < 0x040000
 #include "mesh2mainwindowbase.h"
 #else

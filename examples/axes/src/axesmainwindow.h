@@ -56,7 +56,6 @@ public slots:
     void customScale();
     void updatePlot();
 
-
 private:
     int tics;
 };

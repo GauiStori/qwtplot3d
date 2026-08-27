@@ -3,7 +3,6 @@
 #include <qradiobutton.h>
 #include <qslider.h>
 
-
 #include "enrichmentmainwindow.h"
 #include "enrichments.h"
 #include <qwt3d_function.h>

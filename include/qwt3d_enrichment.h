@@ -31,8 +31,8 @@ public:
     virtual ~Enrichment() {}
     virtual Enrichment *clone() const
         = 0; //!< The derived class should give back a new Derived(something) here
-    virtual void drawBegin(){}; //!< Empty per default. Can be overwritten.
-    virtual void drawEnd(){};   //!< Empty per default. Can be overwritten.
+    virtual void drawBegin() {}; //!< Empty per default. Can be overwritten.
+    virtual void drawEnd() {};   //!< Empty per default. Can be overwritten.
     virtual void assign(Plot3D const &pl) { plot = &pl; } //!< Assign to existent plot;
     virtual TYPE type() const = 0;                        //!< Overwrite
 

@@ -233,7 +233,7 @@ void CoordinateSystem::chooseAxes()
                 }
             }
         } // for axes
-    }     // for idx
+    } // for idx
 
     // fit z axis in - the onthewall axis if the decorated axes build a continous line, the opposite else
     if (choice_x >= 0 && choice_y >= 0 && choice_z >= 0) {

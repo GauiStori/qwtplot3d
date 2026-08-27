@@ -27,7 +27,7 @@ public:
     {
         beg = beg_;
         end = end_;
-    }                                                        //!< Returns axis' position
+    } //!< Returns axis' position
     Qwt3D::Triple begin() const { return beg_; }             //!< Returns axis' beginning position
     Qwt3D::Triple end() const { return end_; }               //!< Returns axis' ending position
     double length() const { return (end_ - beg_).length(); } //!< Returns axis' length
@@ -116,7 +116,7 @@ public:
     {
         start = start_;
         stop = stop_;
-    }                       //!< Returns axis interval
+    } //!< Returns axis interval
     void recalculateTics(); //!< Enforces recalculation of ticmark positions
 
 private:

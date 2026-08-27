@@ -1,11 +1,11 @@
-#include <qsplitter.h>
-#include <qlayout.h>
-#include <qcombobox.h>
 #include <qaction.h>
-#include <qslider.h>
 #include <qcheckbox.h>
-#include <qmenubar.h>
+#include <qcombobox.h>
 #include <qdatetime.h>
+#include <qlayout.h>
+#include <qmenubar.h>
+#include <qslider.h>
+#include <qsplitter.h>
 
 #include "axes.h"
 #include "axesmainwindow.h"

@@ -2,3 +2,9 @@
 A fork of the original sourceforge library.
 
 https://sourceforge.net/projects/qwtplot3d/ version 0.2.7
+
+
+Code format
+
+The code has been indented automatically with 
+find . -name \*.[h,cpp] ! -name gl2ps.\*  -exec clang-format -i {} \;
