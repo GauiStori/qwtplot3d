@@ -1,4 +1,5 @@
 #include "qwt3d_drawable.h"
+#include "qwt3d_openglhelper.h"
 
 using namespace Qwt3D;
 
@@ -85,12 +86,11 @@ Triple Drawable::ViewPort2World(Triple win, bool *err)
     Triple obj;
 
     getMatrices(modelMatrix, projMatrix, viewport);
-#ifdef HAVE_GLES
-    // Missing XXXXXXXX
-    int res = GL_FALSE;
+/*#ifdef HAVE_GLES
+    int res = glesUnProject(win.x, win.y, win.z, modelMatrix, projMatrix, viewport, &obj.x, &obj.y, &obj.z);
 #else
-	int res = gluUnProject(win.x, win.y, win.z, modelMatrix, projMatrix, viewport, &obj.x, &obj.y, &obj.z);
-#endif
+    int res = gluUnProject(win.x, win.y, win.z, modelMatrix, projMatrix, viewport, &obj.x, &obj.y, &obj.z);
+#endif*/
 
     getMatrices(modelMatrix, projMatrix, viewport);
     int res = gluUnProject(win.x,
@@ -118,8 +118,7 @@ Triple Drawable::World2ViewPort(Triple obj, bool *err)
 
     getMatrices(modelMatrix, projMatrix, viewport);
 #ifdef HAVE_GLES
-    // Missing XXXXXXXX
-    int res = GL_FALSE;
+    int res = glesProject(obj.x, obj.y, obj.z, modelMatrix, projMatrix, viewport, &win.x, &win.y, &win.z);
 #else
     int res = gluProject(obj.x, obj.y, obj.z, modelMatrix, projMatrix, viewport, &win.x, &win.y, &win.z);
 #endif

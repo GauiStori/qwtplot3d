@@ -900,7 +900,6 @@ static GLint gl2psAddText(GLint type, const char *str, const char *fontname,
     // Missing XXXXXXXX
 #else
   glGetFloatv(GL_CURRENT_RASTER_COLOR, prim->verts[0].rgba);
-#endif
   prim->data.text = (GL2PSstring*)gl2psMalloc(sizeof(GL2PSstring));
   prim->data.text->str = (char*)gl2psMalloc((strlen(str)+1)*sizeof(char));
   strcpy(prim->data.text->str, str); 
@@ -912,7 +911,8 @@ static GLint gl2psAddText(GLint type, const char *str, const char *fontname,
 
   gl2psListAdd(gl2ps->auxprimitives, &prim);
   glPassThrough(GL2PS_TEXT_TOKEN);
-    
+#endif
+
   return GL2PS_SUCCESS;
 }
 
@@ -5917,9 +5917,12 @@ GL2PSDLL_API GLint gl2psDrawPixels(GLsizei width, GLsizei height,
     break;
   }
 
+#ifdef HAVE_GLES
+    // Missing XXXXXXXX
+#else
   gl2psListAdd(gl2ps->auxprimitives, &prim);
   glPassThrough(GL2PS_DRAW_PIXELS_TOKEN);
-
+#endif
   return GL2PS_SUCCESS;
 }
 
@@ -5934,6 +5937,9 @@ GL2PSDLL_API GLint gl2psDrawImageMap(GLsizei width, GLsizei height,
   if((width <= 0) || (height <= 0)) return GL2PS_ERROR;
   
   size = height + height * ((width-1)/8);
+#ifdef HAVE_GLES
+    // Missing XXXXXXXX
+#else
   glPassThrough(GL2PS_IMAGEMAP_TOKEN);
   glBegin(GL_POINTS);
   glVertex3f(position[0], position[1],position[2]);
@@ -5945,6 +5951,7 @@ GL2PSDLL_API GLint gl2psDrawImageMap(GLsizei width, GLsizei height,
     glPassThrough(*value);
     imagemap += sizeoffloat;
   }
+#endif
   return GL2PS_SUCCESS;
 }
 
@@ -5956,30 +5963,38 @@ GL2PSDLL_API GLint gl2psEnable(GLint mode)
 
   switch(mode){
   case GL2PS_POLYGON_OFFSET_FILL :
+#ifdef HAVE_GLES
+    // Missing XXXXXXXX
+#else
     glPassThrough(GL2PS_BEGIN_OFFSET_TOKEN);
     glGetFloatv(GL_POLYGON_OFFSET_FACTOR, &gl2ps->offset[0]);
     glGetFloatv(GL_POLYGON_OFFSET_UNITS, &gl2ps->offset[1]);
+#endif
     break;
   case GL2PS_POLYGON_BOUNDARY :
+#ifdef HAVE_GLES
+    // Missing XXXXXXXX
+#else
     glPassThrough(GL2PS_BEGIN_BOUNDARY_TOKEN);
+#endif
     break;
   case GL2PS_LINE_STIPPLE :
+#ifdef HAVE_GLES
+    // Missing XXXXXXXX
+#else
     glPassThrough(GL2PS_BEGIN_STIPPLE_TOKEN);
-#ifdef HAVE_GLES
-    // Missing XXXXXXXX
-#else
     glGetIntegerv(GL_LINE_STIPPLE_PATTERN, &tmp);
-#endif
     glPassThrough((GLfloat)tmp);
-#ifdef HAVE_GLES
-    // Missing XXXXXXXX
-#else
     glGetIntegerv(GL_LINE_STIPPLE_REPEAT, &tmp);
-#endif
     glPassThrough((GLfloat)tmp);
+#endif
     break;
   case GL2PS_BLEND :
+#ifdef HAVE_GLES
+    // Missing XXXXXXXX
+#else
     glPassThrough(GL2PS_BEGIN_BLEND_TOKEN);
+#endif
     break;
   default :
     gl2psMsg(GL2PS_WARNING, "Unknown mode in gl2psEnable: %d", mode);
@@ -5995,16 +6010,32 @@ GL2PSDLL_API GLint gl2psDisable(GLint mode)
 
   switch(mode){
   case GL2PS_POLYGON_OFFSET_FILL :
+#ifdef HAVE_GLES
+    // Missing XXXXXXXX
+#else
     glPassThrough(GL2PS_END_OFFSET_TOKEN);
+#endif
     break;
   case GL2PS_POLYGON_BOUNDARY :
+#ifdef HAVE_GLES
+    // Missing XXXXXXXX
+#else
     glPassThrough(GL2PS_END_BOUNDARY_TOKEN);
+#endif
     break;
   case GL2PS_LINE_STIPPLE :
+#ifdef HAVE_GLES
+    // Missing XXXXXXXX
+#else
     glPassThrough(GL2PS_END_STIPPLE_TOKEN);
+#endif
     break;
   case GL2PS_BLEND :
+#ifdef HAVE_GLES
+    // Missing XXXXXXXX
+#else
     glPassThrough(GL2PS_END_BLEND_TOKEN);
+#endif
     break;
   default :
     gl2psMsg(GL2PS_WARNING, "Unknown mode in gl2psDisable: %d", mode);
@@ -6018,8 +6049,12 @@ GL2PSDLL_API GLint gl2psPointSize(GLfloat value)
 {
   if(!gl2ps) return GL2PS_UNINITIALIZED;
 
+#ifdef HAVE_GLES
+    // Missing XXXXXXXX
+#else
   glPassThrough(GL2PS_POINT_SIZE_TOKEN);
   glPassThrough(value);
+#endif
   
   return GL2PS_SUCCESS;
 }
@@ -6028,8 +6063,12 @@ GL2PSDLL_API GLint gl2psLineWidth(GLfloat value)
 {
   if(!gl2ps) return GL2PS_UNINITIALIZED;
 
+#ifdef HAVE_GLES
+    // Missing XXXXXXXX
+#else
   glPassThrough(GL2PS_LINE_WIDTH_TOKEN);
   glPassThrough(value);
+#endif
 
   return GL2PS_SUCCESS;
 }
@@ -6041,10 +6080,14 @@ GL2PSDLL_API GLint gl2psBlendFunc(GLenum sfactor, GLenum dfactor)
   if(GL_FALSE == gl2psSupportedBlendMode(sfactor, dfactor))
     return GL2PS_WARNING;
 
+#ifdef HAVE_GLES
+    // Missing XXXXXXXX
+#else
   glPassThrough(GL2PS_SRC_BLEND_TOKEN);
   glPassThrough((GLfloat)sfactor);
   glPassThrough(GL2PS_DST_BLEND_TOKEN);
   glPassThrough((GLfloat)dfactor);
+#endif
 
   return GL2PS_SUCCESS;
 }

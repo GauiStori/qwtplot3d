@@ -67,15 +67,11 @@ public:
     void draw(Qwt3D::Triple const &);
 
 private:
-#ifdef HAVE_GLES
-    // Missing XXXXXXXX
-#else
     GLUquadricObj *hat;
     GLUquadricObj *disk;
-#endif
-  unsigned quality_;
-  double radius_;
-  GLboolean oldstate_;
+    unsigned quality_;
+    double radius_;
+    GLboolean oldstate_;
 };
 
 //! 3D vector field.
@@ -106,15 +102,7 @@ private:
     GLUquadricObj *bottom;
     GLboolean oldstate_;
 
-#ifdef HAVE_GLES
-    // Missing XXXXXXXX
-#else
-    GLUquadricObj *hat;
-    GLUquadricObj *disk;
-    GLUquadricObj *base;
-    GLUquadricObj *bottom;
-#endif
-    GLboolean oldstate_;
+    double calcRotation(Qwt3D::Triple &axis, Qwt3D::FreeVector const &vec);
 
     int segments_;
     double rel_cone_length;

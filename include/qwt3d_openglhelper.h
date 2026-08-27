@@ -13,6 +13,20 @@
 #endif
 #include <GL/glu.h>
 
+#ifdef HAVE_GLES
+#include <GLES/gl.h>
+#include <GLES/glext.h>
+int glesProject(float objX, float objY, float objZ,
+                 const GLdouble* modelview, const GLdouble* projection,
+                 const int* viewport,
+                 double* winX, double* winY, double* winZ);
+int glesUnProject(float winX, float winY, float winZ,
+               const GLdouble* modelview, const GLdouble* projection,
+               const int* viewport,
+               double* objX, double* objY, double* objZ);
+const char* glesErrorString(GLenum error);
+#endif
+
 namespace Qwt3D {
 
 #ifndef QWT3D_NOT_FOR_DOXYGEN
@@ -65,7 +79,7 @@ inline const GLubyte *gl_error()
     if ((errcode = glGetError()) != GL_NO_ERROR)
     {
 #ifdef HAVE_GLES
-        // Missing XXXXXXXX
+        err = (GLubyte*) glesErrorString(errcode);
 #else
         err = gluErrorString(errcode);
 #endif
@@ -107,8 +121,7 @@ inline bool ViewPort2World(
 
 	getMatrices(modelMatrix, projMatrix, viewport);
 #ifdef HAVE_GLES
-    // Missing XXXXXXXX
-    int res = GL_FALSE;
+    int res = glesUnProject(winx, winy, winz, modelMatrix, projMatrix, viewport, &objx, &objy, &objz);
 #else
     int res = gluUnProject(winx, winy, winz, modelMatrix, projMatrix, viewport, &objx, &objy, &objz);
 #endif
@@ -128,8 +141,7 @@ inline bool World2ViewPort(
 
     getMatrices(modelMatrix, projMatrix, viewport);
 #ifdef HAVE_GLES
-    // Missing XXXXXXXX
-    int res = GL_FALSE;
+    int res = glesProject(objx, objy, objz, modelMatrix, projMatrix, viewport, &winx, &winy, &winz);
 #else
     int res = gluProject(objx, objy, objz, modelMatrix, projMatrix, viewport, &winx, &winy, &winz);
 #endif

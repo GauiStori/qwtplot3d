@@ -9,19 +9,14 @@ OBJECTS_DIR       = tmp
 INCLUDEPATH       = include
 DEPENDPATH        = include src
 DESTDIR           = lib
-<<<<<<< HEAD
-#unix:LIBS        += -lGLU
-#win32:LIBS       += -lglu32
-#DESTDIR          = ../../../lib
-#greaterThan(QT_MAJOR_VERSION,5) {
-#  QT += core gui widgets opengl openglwidgets
-#}
-#else {
-#  QT += opengl
-#}
-DEFINES           += HAVE_GLES
-#DESTDIR          = ../../../lib
-QT += opengl
+unix:LIBS         += -lGLU
+win32:LIBS        += -lglu32
+
+greaterThan(QT_MAJOR_VERSION, 5) {
+  QT += core gui widgets opengl openglwidgets
+} else {
+  QT += opengl
+}
 
 win32:TEMPLATE    = vclib
 win32:CONFIG     += dll exceptions
@@ -69,7 +64,6 @@ HEADERS += include/qwt3d_color.h \
            include/qwt3d_drawable.h \
            include/qwt3d_helper.h \
            include/qwt3d_label.h \
-           include/qwt3d_openglhelper.h \
            include/qwt3d_colorlegend.h \
            include/qwt3d_plot.h \
            include/qwt3d_enrichment.h \
@@ -80,9 +74,8 @@ HEADERS += include/qwt3d_color.h \
            include/qwt3d_io_reader.h \
            include/qwt3d_scale.h \
            include/qwt3d_portability.h
-						
 HEADERS += include/qwt3d_mapping.h \
-					 include/qwt3d_gridmapping.h \
+           include/qwt3d_gridmapping.h \
            include/qwt3d_parametricsurface.h \
            include/qwt3d_function.h
 
