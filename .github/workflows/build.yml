@@ -10,28 +10,8 @@ permissions:
 
 jobs:
   linux:
-    name: Linux ${{ matrix.name }}
+    name: Linux Qt 5 backends
     runs-on: ubuntu-24.04
-    strategy:
-      fail-fast: false
-      matrix:
-        include:
-          - name: Qt 5 / OpenGL
-            qmake: qmake -qt=5
-            config: ""
-            library: lib/libqwtplot3d-qt5.so.0.2.7
-          - name: Qt 5 / GLES 1
-            qmake: qmake -qt=5
-            config: CONFIG+=gles
-            library: lib/libqwtplot3d-qt5.so.0.2.7
-          - name: Qt 6 / OpenGL
-            qmake: qmake6
-            config: ""
-            library: lib/libqwtplot3d-qt6.so.0.2.7
-          - name: Qt 6 / GLES 1
-            qmake: qmake6
-            config: CONFIG+=gles
-            library: lib/libqwtplot3d-qt6.so.0.2.7
 
     steps:
       - name: Check out sources
@@ -45,28 +25,56 @@ jobs:
             libgles-dev \
             libglu1-mesa-dev \
             libqt5opengl5-dev \
-            libqt6opengl6-dev \
             qtbase5-dev \
-            qt6-base-dev \
             zlib1g-dev
 
       - name: Configure
-        run: ${{ matrix.qmake }} ${{ matrix.config }} qwtplot3d.pro
+        run: |
+          mkdir build-desktop
+          cd build-desktop
+          qmake -qt=5 ../qwtplot3d.pro
 
-      - name: Build library
+      - name: Build desktop OpenGL
+        working-directory: build-desktop
         run: make --jobs="$(nproc)"
 
-      - name: Check library
+      - name: Check desktop library
+        working-directory: build-desktop
         run: |
-          test -e "${{ matrix.library }}"
-          readelf --dynamic "${{ matrix.library }}" | grep NEEDED
+          test -e lib/libqwtplot3d-qt5.so.0.2.7
+          readelf --dynamic lib/libqwtplot3d-qt5.so.0.2.7 | grep NEEDED
 
-      - name: Check Qt 5 GLES direct dependencies
-        if: matrix.name == 'Qt 5 / GLES 1'
+      - name: Configure and build GLES
         run: |
-          if readelf --dynamic "${{ matrix.library }}" \
+          mkdir build-gles
+          cd build-gles
+          qmake -qt=5 CONFIG+=gles ../qwtplot3d.pro
+          make --jobs="$(nproc)"
+
+      - name: Check GLES library
+        working-directory: build-gles
+        run: |
+          test -e lib/libqwtplot3d-qt5.so.0.2.7
+          readelf --dynamic lib/libqwtplot3d-qt5.so.0.2.7 | grep NEEDED
+          if readelf --dynamic lib/libqwtplot3d-qt5.so.0.2.7 \
               | grep NEEDED \
               | grep -E 'libGL(U)?\.so|libQt5OpenGL'; then
-            echo "The Qt 5 GLES library has a direct desktop OpenGL dependency."
+            echo "The GLES library has a direct desktop OpenGL dependency."
             exit 1
           fi
+
+      - name: Run core tests
+        run: |
+          mkdir build-tests
+          cd build-tests
+          qmake -qt=5 ../tests/core_tests.pro
+          make --jobs="$(nproc)"
+          ./qwtplot3d-core-tests
+
+      - name: Run core tests with GLES
+        run: |
+          mkdir build-tests-gles
+          cd build-tests-gles
+          qmake -qt=5 CONFIG+=gles ../tests/core_tests.pro
+          make --jobs="$(nproc)"
+          ./qwtplot3d-core-tests
