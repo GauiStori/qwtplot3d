@@ -1,0 +1,72 @@
+name: Build
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  linux:
+    name: Linux ${{ matrix.name }}
+    runs-on: ubuntu-24.04
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: Qt 5 / OpenGL
+            qmake: qmake -qt=5
+            config: ""
+            library: lib/libqwtplot3d-qt5.so.0.2.7
+          - name: Qt 5 / GLES 1
+            qmake: qmake -qt=5
+            config: CONFIG+=gles
+            library: lib/libqwtplot3d-qt5.so.0.2.7
+          - name: Qt 6 / OpenGL
+            qmake: qmake6
+            config: ""
+            library: lib/libqwtplot3d-qt6.so.0.2.7
+          - name: Qt 6 / GLES 1
+            qmake: qmake6
+            config: CONFIG+=gles
+            library: lib/libqwtplot3d-qt6.so.0.2.7
+
+    steps:
+      - name: Check out sources
+        uses: actions/checkout@v7
+
+      - name: Install build dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install --yes --no-install-recommends \
+            build-essential \
+            libgles-dev \
+            libglu1-mesa-dev \
+            libqt5opengl5-dev \
+            libqt6opengl6-dev \
+            qtbase5-dev \
+            qt6-base-dev \
+            zlib1g-dev
+
+      - name: Configure
+        run: ${{ matrix.qmake }} ${{ matrix.config }} qwtplot3d.pro
+
+      - name: Build library
+        run: make --jobs="$(nproc)"
+
+      - name: Check library
+        run: |
+          test -e "${{ matrix.library }}"
+          readelf --dynamic "${{ matrix.library }}" | grep NEEDED
+
+      - name: Check Qt 5 GLES direct dependencies
+        if: matrix.name == 'Qt 5 / GLES 1'
+        run: |
+          if readelf --dynamic "${{ matrix.library }}" \
+              | grep NEEDED \
+              | grep -E 'libGL(U)?\.so|libQt5OpenGL'; then
+            echo "The Qt 5 GLES library has a direct desktop OpenGL dependency."
+            exit 1
+          fi
